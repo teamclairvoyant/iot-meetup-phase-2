@@ -7,31 +7,31 @@ This project is java based OSGi Bundle that is installed on Eclipse Kura (An IOT
 
 2.**SETTING THE ENVIRONMENT AND USAGE**
 
-    1. First Setting up the Kura Development Environment in Eclipse. Follow the below given link for complete instruction.
+   1. First Setting up the Kura Development Environment in Eclipse. Follow the below given link for complete instruction.
        https://eclipse.github.io/kura/dev/kura-setup.html
        
-    2. Try to implement the Hello World example given in Kura's official page(hit below given link) to check your local Kura 	    dev environment is working properly or not.
+   2. Try to implement the Hello World example given in Kura's official page(hit below given link) to check your local Kura 	    dev environment is working properly or not.
        Hello World Example :- https://eclipse.github.io/kura/dev/hello-example.html
        Deploying Bundles(On Remote Target Device) :- https://eclipse.github.io/kura/dev/deploying-bundles.html
        
-    3. Our OSGi Bundle is using Apache Felix Maven Bundle Plugin (BND) to build and create deployble Jar so it's better to 	  get familiar with this tool. As you may need to change ‘pom.xml’ according to your use case and all the configuration        for creating MANIFEST.MF file (part of OSGi bundle) is present in build tag of pom. 
+   3. Our OSGi Bundle is using Apache Felix Maven Bundle Plugin (BND) to build and create deployble Jar so it's better to 	  get familiar with this tool. As you may need to change ‘pom.xml’ according to your use case and all the configuration        for creating MANIFEST.MF file (part of OSGi bundle) is present in build tag of pom. 
        Please visit below link for more information.
        
        http://felix.apache.org/documentation/subprojects/apache-felix-maven-bundle-plugin-bnd.html 
        
-    4. Now clone the "org.eclipse.kura.DHT11" project from the git repository. 							https://github.com/maneeshbishnoi/org.eclipse.kura.DHT11.git
+   4. Now clone the "org.eclipse.kura.DHT11" project from the git repository. 							https://github.com/maneeshbishnoi/org.eclipse.kura.DHT11.git
     
-    5. Navigate to the place where pom.xml file is present and run the following command. 
+   5. Navigate to the place where pom.xml file is present and run the following command. 
        This builds a Deploy-able Jar (OSGi Bundle) file with all the dependencies under your local maven repository (or path  	     of bundled JAR will be given on terminal after successfully executing below command).
        
         mvn clean install       
     
-    6. Copy and save the downloaded jar into desktop or any other folder as you will need this to deploy on Kura.
+   6. Copy and save the downloaded jar into desktop or any other folder as you will need this to deploy on Kura.
     
-    7. Install/Deploy this bundle into your Kura enable remote target device through Eclipse IDE. Please follow below link 	  for instruction on deploying on remote device through eclipse.
+   7. Install/Deploy this bundle into your Kura enable remote target device through Eclipse IDE. Please follow below link 	  for instruction on deploying on remote device through eclipse.
        https://eclipse.github.io/kura/dev/deploying-bundles.html#remote-target-device
        
-    8. After installing bundle on Kura, bundle can be managed using below commands.
+   8. After installing bundle on Kura, bundle can be managed using below commands.
     
      a. First enter into Kura enable remote target device(like Raspberry Pi ) through ssh.
           :~ ssh user_name@R-Pi_IP-Address
@@ -62,6 +62,6 @@ This project is java based OSGi Bundle that is installed on Eclipse Kura (An IOT
      i. And finally this data can be used in further downstream application for analysis. Also it can be exported into CSV or 	    Excel file. Here in our use case we are connecting Kapua to Grafana to create dashboard for visualizing the data.
     
     
-    9. Finally download and install Grafana if you want dashboard or graph for displaying the data. 
+   9. Finally download and install Grafana if you want dashboard or graph for displaying the data. 
 	a.  http://docs.grafana.org/guides/getting_started/
 	b. how to setup Grafana to display Kapua metrics/data. 	   	https://www.youtube.com/watch?v=iMiBjzKHBuk
