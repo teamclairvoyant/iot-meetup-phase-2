@@ -11,18 +11,20 @@ This project is java based OSGi Bundle that is installed on Eclipse Kura (An IOT
        https://eclipse.github.io/kura/dev/kura-setup.html
        
    2. Try to implement the Hello World example given in Kura's official page(hit below given link) to check your local Kura 	    dev environment is working properly or not.
+   
        Hello World Example :- https://eclipse.github.io/kura/dev/hello-example.html
+       
        Deploying Bundles(On Remote Target Device) :- https://eclipse.github.io/kura/dev/deploying-bundles.html
        
-   3. Our OSGi Bundle is using Apache Felix Maven Bundle Plugin (BND) to build and create deployble Jar so it's better to 	  get familiar with this tool. As you may need to change ‘pom.xml’ according to your use case and all the configuration        for creating MANIFEST.MF file (part of OSGi bundle) is present in build tag of pom. 
-       Please visit below link for more information.
+   3. Our OSGi Bundle is using Apache Felix Maven Bundle Plugin (BND) to build and create deployble Jar so it's better to 	get familiar with this tool. As you may need to change ‘pom.xml’ according to your use case and all the configuration         for creating MANIFEST.MF file (part of OSGi bundle) is present in build tag of pom. 
+      Please visit below link for more information.
        
        http://felix.apache.org/documentation/subprojects/apache-felix-maven-bundle-plugin-bnd.html 
        
    4. Now clone the "org.eclipse.kura.DHT11" project from the git repository. 							https://github.com/maneeshbishnoi/org.eclipse.kura.DHT11.git
     
    5. Navigate to the place where pom.xml file is present and run the following command. 
-       This builds a Deploy-able Jar (OSGi Bundle) file with all the dependencies under your local maven repository (or path  	     of bundled JAR will be given on terminal after successfully executing below command).
+      This builds a Deploy-able Jar (OSGi Bundle) file with all the dependencies under your local maven repository (or path  	   of bundled JAR will be given on terminal after successfully executing below command).
        
         mvn clean install       
     
@@ -34,23 +36,32 @@ This project is java based OSGi Bundle that is installed on Eclipse Kura (An IOT
    8. After installing bundle on Kura, bundle can be managed using below commands.
     
      a. First enter into Kura enable remote target device(like Raspberry Pi ) through ssh.
+     
           :~ ssh user_name@R-Pi_IP-Address
+	  
 	   OR
+	   
  	  If the Raspberry Pi is with you then directly open the terminal .
 
      b. Now pen OSGi console using below command.
+     
 	  :~ telnet localhost 5002
 
      c. List all the installed bundle.
+     
 	  :~ ss 
-	now you could see your installed bundle with ID and State in last of the complete bundle 	list if it was 		installed successfully from Eclipse.
+	  
+	- now you could see your installed bundle with ID and State in last of the complete bundle 	list if it was 		  installed successfully from Eclipse.
      
      d. Start and stop bundle with IDs.
+     
 	 :~ start {Bundle_ID} or stop {Bundle_ID} 
 
      e. After starting your bundle check your bundle's state like Active/Registered/Unsatisfied. 	
+     
 	:~ ls {Bundle_ID}
-	Note:  After this command if your bundle doesn't show the "Active" state means there is     	some problem with 	  your bundle, you can check logs in directory /var/log/ witj file named 	`kura.log` and `kura-console.log` to 	     figure out the exact issue.
+	
+	Note:-  After this command if your bundle doesn't show the "Active" state means there is     	some problem with 	  your bundle, you can check logs in directory /var/log/ witj file named 	`kura.log` and `kura-console.log` to 	     figure out the exact issue.
 
      f. Now you can navigate to the directory /var/log/ for checking logs and results coming from your bundle.
        (You would see Temperature and Humidity reading in `kura.log` file )
@@ -63,5 +74,11 @@ This project is java based OSGi Bundle that is installed on Eclipse Kura (An IOT
     
     
    9. Finally download and install Grafana if you want dashboard or graph for displaying the data. 
-	a.  http://docs.grafana.org/guides/getting_started/
-	b. how to setup Grafana to display Kapua metrics/data. 	   	https://www.youtube.com/watch?v=iMiBjzKHBuk
+   
+   	a. How to get started with Grafana(Setup and Installation).
+	
+	  http://docs.grafana.org/guides/getting_started/
+		
+        b. How to setup Grafana to display Kapua metrics/data. 
+	
+         https://www.youtube.com/watch?v=iMiBjzKHBuk
