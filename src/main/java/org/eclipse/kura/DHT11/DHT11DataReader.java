@@ -15,6 +15,8 @@ public class DHT11DataReader {
 
 	// GPIO Stuff
 	private final int[] dht11_dat = { 0, 0, 0, 0, 0 };
+	
+	// change the pin number accordingly as this is your DHT11 sensor's DATA pin connected to Raspberry Pi 3.
 	private static int pin = 7;
 	private static final int MAXTIMINGS = 85;
 
