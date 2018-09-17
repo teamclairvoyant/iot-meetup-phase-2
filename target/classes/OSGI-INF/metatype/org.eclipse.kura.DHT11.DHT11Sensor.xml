@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MetaData xmlns="http://www.osgi.org/xmlns/metatype/v1.2.0" localization="en_us">
+    <OCD id="org.eclipse.kura.DHT11.DHT11Sensor"
+        name="DHT11Sensor"
+        description="This is a metatype file for a DHT11 configurable component">
+
+        <AD id="Tempy"
+            name="Temperature"
+            type="String"
+            cardinality="0"
+            required="true"
+            default="Temperature"
+            description="Please specify the metric name for Temperature reading to be added with KuraPayload object"/>
+
+        <AD id="Humidy"
+            name="Humidity"
+            type="String"
+            cardinality="0"
+            required="True"
+            default="Humidity"
+            description="Please specify the metric name for Humidity reading to be added with KuraPayload object"/>
+   	
+   		<AD id="Topic"
+            name="Topic"
+            type="String"
+            cardinality="0"
+            required="true"
+            default="DHT11Test"
+            description="Please specify the Topic name to used for storing data into Kapua-Cloud"/>
+   
+    </OCD>
+
+    <Designate pid="org.eclipse.kura.DHT11.DHT11Sensor">
+        <Object ocdref="org.eclipse.kura.DHT11.DHT11Sensor"/>
+    </Designate>
+</MetaData>
