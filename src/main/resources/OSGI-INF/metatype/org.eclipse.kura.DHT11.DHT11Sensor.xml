@@ -4,7 +4,7 @@
         name="DHT11Sensor"
         description="This is a metatype file for a DHT11 configurable component">
 
-        <AD id="Tempy"
+        <AD id="Temperature"
             name="Temperature"
             type="String"
             cardinality="0"
