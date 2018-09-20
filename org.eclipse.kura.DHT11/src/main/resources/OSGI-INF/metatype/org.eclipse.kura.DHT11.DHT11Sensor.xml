@@ -20,7 +20,7 @@
             default="Humidity"
             description="Please specify the metric name for Humidity reading to be added with KuraPayload object"/>
    	
-   		<AD id="Topic"
+   	<AD id="Topic"
             name="Topic"
             type="String"
             cardinality="0"
