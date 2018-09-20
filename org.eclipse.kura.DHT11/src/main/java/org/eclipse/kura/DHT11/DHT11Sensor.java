@@ -33,7 +33,7 @@ public class DHT11Sensor implements ConfigurableComponent, CloudClientListener {
 	private double humidity;
 
 	private Map<String, Object> m_properties;
-	private static final String APP_ID = "DHT11SensorTest";
+	private static final String APP_ID = "DHT11Sensor";
 
 	// Publishing Property Names on Kura Web UI
 	private static final String PROP_TEMPERATURE_METRIC = "Temperature";
