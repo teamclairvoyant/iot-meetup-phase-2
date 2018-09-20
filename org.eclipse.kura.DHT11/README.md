@@ -92,7 +92,9 @@ This project is java based OSGi Bundle that is installed on Eclipse Kura (An IOT
    	a. How to get started with Grafana(Setup and Installation).
 	
 	  http://docs.grafana.org/guides/getting_started/
+	  
 		
         b. How to setup Grafana to display Kapua metrics/data. 
 	
          https://www.youtube.com/watch?v=iMiBjzKHBuk
+	 
