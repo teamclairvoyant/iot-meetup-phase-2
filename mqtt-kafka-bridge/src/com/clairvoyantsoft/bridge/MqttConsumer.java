@@ -6,6 +6,8 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import com.clairvoyantsoft.mqtt.MessageReceiver;
+
 public class MqttConsumer {
 
 	public static void main(String[] args) {

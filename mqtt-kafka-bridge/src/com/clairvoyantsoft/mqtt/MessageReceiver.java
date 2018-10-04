@@ -1,4 +1,4 @@
-package com.clairvoyantsoft.bridge;
+package com.clairvoyantsoft.mqtt;
 
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -26,6 +26,8 @@ public class MessageReceiver implements MqttCallback {
 
 		try {
 
+			//write different parsing logic for different brokers/topics/message
+			
 			final CloudPayloadProtoBufDecoderImpl decoder = new CloudPayloadProtoBufDecoderImpl(payload);
 
 			KuraPayload kuraPayload = decoder.buildFromByteArray();
@@ -40,7 +42,7 @@ public class MessageReceiver implements MqttCallback {
 
 			System.out.println("recordString " + recordString);
 
-			final ProducerRecord<Long, String> record = new ProducerRecord<>("test", recordString);
+			final ProducerRecord<Long, String> record = new ProducerRecord<>(topic, recordString);
 			producer.send(record, (metadata, exception) -> {
 				long elapsedTime = System.currentTimeMillis() - kuraPayload.getTimestamp().getTime();
 				if (metadata != null) {
