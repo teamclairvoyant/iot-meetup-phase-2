@@ -70,7 +70,7 @@ public class HbaseConnector {
 		put.add(Bytes.toBytes("humidity"), Bytes.toBytes("humidity"), Bytes.toBytes("100000"));
 		// insert the put instance to table
 		table.put(put);
-		System.out.println("Values inserted : ");
+		System.out.println("Values inserted : "); 
 		table.close();
 
 	}

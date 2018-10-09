@@ -30,7 +30,7 @@ public class StartStreaming2 {
 		props.setProperty("zookeeper.connect", "localhost:2181");
 		props.setProperty("bootstrap.servers", "localhost:9092");
 		// not to be shared with another job consuming the same topic
-		props.setProperty("group.id", "flink-group");
+		props.setProperty("group.id", "flink-group"); 
 		// props.setProperty("auto.offset.reset", "earliest");
 
 		FlinkKafkaConsumer011<String> kafkaConsumer = new FlinkKafkaConsumer011<>("temp_humidity",
