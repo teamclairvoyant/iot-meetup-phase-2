@@ -10,7 +10,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 import org.apache.flink.streaming.util.serialization.SimpleStringSchema;
 
-import com.clairvoyantsoft.flink.Sink.KuduSink;
+import com.clairvoyantsoft.flink.Sink.HBaseOutputFormat;
 import com.clairvoyantsoft.flink.Utils.RowSerializable;
 
 public class StartStreaming2 {
@@ -33,7 +33,7 @@ public class StartStreaming2 {
 		props.setProperty("group.id", "flink-group");
 		// props.setProperty("auto.offset.reset", "earliest");
 
-		FlinkKafkaConsumer011<String> kafkaConsumer = new FlinkKafkaConsumer011<>("test",
+		FlinkKafkaConsumer011<String> kafkaConsumer = new FlinkKafkaConsumer011<>("temp_humidity",
 				// true means we include metadata like topic name not
 				// necessarily useful for this very example
 				new SimpleStringSchema(), props);
@@ -43,11 +43,14 @@ public class StartStreaming2 {
 		// stream.writeAsText("file:///D:/tmp/out.txt");
 		// stream.print();
 
-		DataStream<RowSerializable> stream2 = stream.map(new MyMapFunction());
+		/*DataStream<RowSerializable> stream2 = stream.map(new MyMapFunction());
 
 		String[] cloumns = { "deviceId", "time", "temperature", "humidity" };
 
-		stream2.addSink(new KuduSink("127.0.0.1", "temp_humidity", cloumns));
+		stream2.addSink(new KuduSink("127.0.0.1", "temp_humidity", cloumns));*/
+		
+		stream.writeUsingOutputFormat(new HBaseOutputFormat());
+		
 
 		// to send data back to Kafka
 		/*

@@ -15,7 +15,6 @@ public class KuduSink extends RichSinkFunction<RowSerializable>{
     private String host, tableName;
     private String [] fieldsNames;
     private transient Utils utils;
-
     //Kudu variables
     private transient KuduTable table;
 

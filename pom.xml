@@ -36,8 +36,10 @@
 		<kafka.version>2.0.0</kafka.version>
 		<slf4j.version>1.7.21</slf4j.version>
 		<kudu.version>1.4.0</kudu.version>
+		<hadoop.version>2.6.5</hadoop.version>
+		<hbase.version>1.4.7</hbase.version>
 	</properties>
-	
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -121,7 +123,18 @@
 				<artifactId>flink-connector-kafka-0.11_2.11</artifactId>
 				<version>${flink.version}</version>
 			</dependency>
+			<!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-client -->
+			<dependency>
+				<groupId>org.apache.hadoop</groupId>
+				<artifactId>hadoop-client</artifactId>
+				<version>${hadoop.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.hbase</groupId>
+				<artifactId>hbase-client</artifactId>
+				<version>${hbase.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
+
 </project>
