@@ -12,7 +12,12 @@ import com.clairvoyantsoft.flink.Utils.Exceptions.KuduClientException;
 
 public class KuduSink extends RichSinkFunction<RowSerializable>{
 
-    private String host, tableName;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6028283867730363180L;
+	
+	private String host, tableName;
     private String [] fieldsNames;
     private transient Utils utils;
     //Kudu variables

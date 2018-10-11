@@ -10,7 +10,6 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 import org.apache.flink.streaming.util.serialization.SimpleStringSchema;
 
-import com.clairvoyantsoft.flink.Sink.HBaseOutputFormat;
 import com.clairvoyantsoft.flink.Utils.RowSerializable;
 
 public class StartStreaming2 {
@@ -49,7 +48,7 @@ public class StartStreaming2 {
 
 		stream2.addSink(new KuduSink("127.0.0.1", "temp_humidity", cloumns));*/
 		
-		stream.writeUsingOutputFormat(new HBaseOutputFormat());
+		//stream.writeUsingOutputFormat(new HBaseOutputFormat());
 		
 
 		// to send data back to Kafka

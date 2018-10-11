@@ -11,12 +11,24 @@ import org.apache.hadoop.hbase.util.Bytes;
 
 public class HBaseOutputFormat implements OutputFormat<String> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3294495525029550656L;
+	
 	private org.apache.hadoop.conf.Configuration conf = null;
 	private HTable table = null;
 	private String taskNumber = null;
 	private int rowNumber = 0;
+	private String tableName = null;
+	private String[] columns;
+	private String dbUrl = null;
 
-	private static final long serialVersionUID = 1L;
+	public HBaseOutputFormat(String dbUrl, String tableName, String[] columns) {
+		this.tableName = tableName;
+		this.columns = columns;
+		this.dbUrl = dbUrl;
+	}
 
 	@Override
 	public void configure(Configuration parameters) {
@@ -25,7 +37,7 @@ public class HBaseOutputFormat implements OutputFormat<String> {
 
 	@Override
 	public void open(int taskNumber, int numTasks) throws IOException {
-		table = new HTable(conf, "temp_humidity");
+		table = new HTable(conf, tableName);
 		this.taskNumber = String.valueOf(taskNumber);
 	}
 
@@ -39,13 +51,13 @@ public class HBaseOutputFormat implements OutputFormat<String> {
 			for (String s : record.split("\\|")) {
 				System.out.println("s " + s);
 				if (i == 0)
-					put.add(Bytes.toBytes("deviceId"), Bytes.toBytes("macId"), Bytes.toBytes(s));
+					put.add(Bytes.toBytes("id"), Bytes.toBytes(columns[i]), Bytes.toBytes(s));
 				if (i == 1)
-					put.add(Bytes.toBytes("time"), Bytes.toBytes("long"), Bytes.toBytes(new Long(s)));
+					put.add(Bytes.toBytes("time"), Bytes.toBytes(columns[i]), Bytes.toBytes(new Long(s)));
 				if (i == 2)
-					put.add(Bytes.toBytes("temperature"), Bytes.toBytes("temp_c"), Bytes.toBytes(new Double(s)));
+					put.add(Bytes.toBytes("data"), Bytes.toBytes(columns[i]), Bytes.toBytes(new Double(s)));
 				if (i == 3)
-					put.add(Bytes.toBytes("humidity"), Bytes.toBytes("humidity"), Bytes.toBytes(new Double(s)));
+					put.add(Bytes.toBytes("data"), Bytes.toBytes(columns[i]), Bytes.toBytes(new Double(s)));
 				i++;
 			}
 		}
