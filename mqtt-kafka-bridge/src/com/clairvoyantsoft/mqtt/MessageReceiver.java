@@ -1,7 +1,5 @@
 package com.clairvoyantsoft.mqtt;
 
-import com.clairvoyantsoft.kafka.ProducerCreator;
-import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.eclipse.kura.core.cloud.CloudPayloadProtoBufDecoderImpl;
 import org.eclipse.kura.message.KuraPayload;
@@ -11,7 +9,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class MessageReceiver implements MqttCallback {
 
-    final Producer<Long, String> producer = ProducerCreator.createProducer();
+    //  final Producer<Long, String> producer = ProducerCreator.createProducer();
 
     @Override
     public void connectionLost(Throwable cause) {
@@ -26,22 +24,28 @@ public class MessageReceiver implements MqttCallback {
         String msg = new String(payload);
 
         if (msg.startsWith("alert")) {
-            try {
-                Process p = null;
-                if (msg.equals("alert_temp")) {
-                    p = Runtime.getRuntime().exec("ls -aF");
+            System.out.println("Alert received " + msg);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Process p = null;
+                        if (msg.equals("alert_temp")) {
+                            p = Runtime.getRuntime().exec("ls -aF");
+                        }
+                        if (msg.equals("alert_hum")) {
+                            p = Runtime.getRuntime().exec("ls -aF");
+                        }
+                        if (p != null) {
+                            p.waitFor();
+                            System.out.println("exit value: " + p.exitValue());
+                            p.destroy();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-                if (msg.equals("alert_hum")) {
-                    p = Runtime.getRuntime().exec("ls -aF");
-                }
-                if (p != null) {
-                    p.waitFor();
-                    System.out.println("exit: " + p.exitValue());
-                    p.destroy();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            }).start();
 
         } else {
 
@@ -54,23 +58,46 @@ public class MessageReceiver implements MqttCallback {
 
                 KuraPayload kuraPayload = decoder.buildFromByteArray();
 
-                Object humidityReading = kuraPayload.getMetric("HumidityReading");
-                Object temperatureReading = kuraPayload.getMetric("TemperatureReading");
+                Object humidityReading = kuraPayload.getMetric("Humit");
+                Object temperatureReading = kuraPayload.getMetric("Tempt");
                 String humidity = String.valueOf(humidityReading);
                 String temperature = String.valueOf(temperatureReading);
 
-                if (Double.valueOf(temperature) > 30) {
-                    MqttMessage alert = new
-                        MqttMessage("alert_temp".getBytes());
-                    message.setQos(2);
-                    PahoMqttClient.getInstance().getClient().publish("alert", alert);
+                if (Double.valueOf(temperature) > 20d) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                MqttMessage alert = new
+                                    MqttMessage("alert_temp".getBytes());
+                                message.setQos(0);
+                                PahoMqttClient.getInstance().getClient()
+                                    .publish("kapua-sys/Meetup_Kapua/DHT11Sensor/alert", alert);
+                                System.out.println("sent temp alert");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
                 }
 
-                if (Double.valueOf(humidity) > 60) {
-                    MqttMessage alert = new
-                        MqttMessage("alert_hum".getBytes());
-                    message.setQos(2);
-                    PahoMqttClient.getInstance().getClient().publish("alert", alert);
+                if (Double.valueOf(humidity) > 60d) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                MqttMessage alert = new
+                                    MqttMessage("alert_hum".getBytes());
+                                message.setQos(0);
+                                PahoMqttClient.getInstance().getClient()
+                                    .publish("kapua-sys/Meetup_Kapua/DHT11Sensor/alert", alert);
+                                System.out.println("sent humid alert");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+
                 }
 
                 String recordString =
@@ -81,6 +108,7 @@ public class MessageReceiver implements MqttCallback {
 
                 final ProducerRecord<Long, String> record =
                     new ProducerRecord<>(topic, recordString);
+/*
                 producer.send(record, (metadata, exception) -> {
                     long elapsedTime =
                         System.currentTimeMillis() - kuraPayload.getTimestamp().getTime();
@@ -92,6 +120,7 @@ public class MessageReceiver implements MqttCallback {
                         exception.printStackTrace();
                     }
                 });
+*/
 
             } catch (Exception e) {
                 e.printStackTrace();

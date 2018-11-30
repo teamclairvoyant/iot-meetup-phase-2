@@ -1,15 +1,14 @@
 package com.clairvoyantsoft.mqtt;
 
+import com.clairvoyantsoft.propertyloader.PropertyLoader;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-import com.clairvoyantsoft.propertyloader.PropertyLoader;
-
 public class PahoMqttClient {
 
-	private MqttClient client;
+	private static MqttClient client;
 
 	private final MemoryPersistence persistence = new MemoryPersistence();
 
@@ -57,7 +56,7 @@ public class PahoMqttClient {
 		if (client == null)
 			createMqttClient();
 
-		if (client.isConnected()) {
+		if (!client.isConnected()) {
 			client = null;
 			createMqttClient();
 		}
