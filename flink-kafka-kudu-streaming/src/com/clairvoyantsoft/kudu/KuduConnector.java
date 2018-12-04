@@ -26,21 +26,20 @@ public class KuduConnector {
 
 	public static void main(String[] args) {
 		System.out.println("-----------------------------------------------");
-		System.out.println("Will try to connect to Kudu master at " + "192.168.99.100");
+		System.out.println("Will try to connect to Kudu master at " + "quickstart.cloudera");
 		System.out.println("Run with -DkuduMaster=myHost:port to override.");
 		System.out.println("-----------------------------------------------");
 		String tableName = "temp_humidity";
-		KuduClient client = new KuduClient.KuduClientBuilder("localhost").build();
+		KuduClient client = new KuduClient.KuduClientBuilder("quickstart.cloudera").build();
 
 		try {
 
-			// System.out.println("tables "+
-			// client.getTablesList().getTablesList().get(0).toString());
-
-			/*List<ColumnSchema> columns = new ArrayList(4);
+			
+/*
+			List<ColumnSchema> columns = new ArrayList(4);
 			columns.add(
 					new ColumnSchema.ColumnSchemaBuilder("deviceId", Type.STRING).key(true).nullable(false).build());
-			columns.add(new ColumnSchema.ColumnSchemaBuilder("time", Type.UNIXTIME_MICROS).key(true).nullable(false)
+			columns.add(new ColumnSchema.ColumnSchemaBuilder("time", Type.INT64).key(true).nullable(false)
 					.build());
 			columns.add(new ColumnSchema.ColumnSchemaBuilder("temperature", Type.DOUBLE).build());
 			columns.add(new ColumnSchema.ColumnSchemaBuilder("humidity", Type.DOUBLE).build());
@@ -51,20 +50,26 @@ public class KuduConnector {
 			Schema schema = new Schema(columns);
 
 			client.createTable(tableName, schema,
-					new CreateTableOptions().setRangePartitionColumns(rangeKeys).setNumReplicas(1));*/
+					new CreateTableOptions().setRangePartitionColumns(rangeKeys).setNumReplicas(1));
 
+			System.out.println("tables "+
+					 client.getTablesList().getTablesList().get(0).toString());*/
+			
 			KuduTable table = client.openTable(tableName);
 
-			/*KuduSession session = client.newSession();
-			for (int i = 0; i < 3; i++) {
+			KuduSession session = client.newSession();
+			long date =  1539722092000l;
+			for (int i = 0; i < 3000; i++) {
 				Insert insert = table.newInsert();
 				PartialRow row = insert.getRow();
-				row.addString(0, "mac " + 1);
-				row.addLong(1, new Date().getTime());
-				row.addDouble(2, i);
-				row.addDouble(3, i);
+				row.addString(0, "device_1");
+				 date =  date+60000l;
+				 System.out.println("date "+date);
+				row.addLong(1, date);
+				row.addDouble(2, 10);
+				row.addDouble(3, 20);
 				session.apply(insert);
-			}*/
+			}
 
 			List<String> projectColumns = new ArrayList<>(1);
 			projectColumns.add("deviceId");
@@ -79,7 +84,6 @@ public class KuduConnector {
 					System.out.println(result.getString(0) + " " + new Date(result.getLong(1))+" "+result.getDouble(2)+" "+result.getDouble(3));
 				}
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

@@ -12,10 +12,10 @@ public class MqttConsumer {
 
 	public static void main(String[] args) {
 
-		String topic = "kapua-sys/Meetup_Kapua/DHT11Sensor/DHT11TechTalk";
+		String topic = "kapua-sys/Meetup_Kapua/DHT11Sensor/DHTMeetup22";
 		String content = "Message from MqttPublishSample";
 		int qos = 2;
-		String broker = "tcp://192.168.34.124:1883";
+		String broker = "tcp://192.168.32.190:1883";
 		String clientId = "JavaSample";
 		MemoryPersistence persistence = new MemoryPersistence();
 

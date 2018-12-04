@@ -44,7 +44,7 @@ public class HBaseOutputFormat implements OutputFormat<String> {
 	@Override
 	public void writeRecord(String record) throws IOException {
 		Put put = new Put(Bytes.toBytes(taskNumber + rowNumber));
-
+		System.out.println("row " + taskNumber + rowNumber);
 		System.out.println("record " + record);
 		if (record.contains("|")) {
 			Integer i = 0;

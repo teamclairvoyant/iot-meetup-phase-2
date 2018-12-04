@@ -32,8 +32,8 @@ public class MessageReceiver implements MqttCallback {
 
 			KuraPayload kuraPayload = decoder.buildFromByteArray();
 
-			Object humidityReading = kuraPayload.getMetric("HumidityReading");
-			Object temperatureReading = kuraPayload.getMetric("TemperatureReading");
+			Object humidityReading = kuraPayload.getMetric("Humit");
+			Object temperatureReading = kuraPayload.getMetric("Tempt");
 			String humidity = String.valueOf(humidityReading);
 			String temperature = String.valueOf(temperatureReading);
 
@@ -42,7 +42,7 @@ public class MessageReceiver implements MqttCallback {
 
 			System.out.println("recordString " + recordString);
 
-			final ProducerRecord<Long, String> record = new ProducerRecord<>(topic, recordString);
+			final ProducerRecord<Long, String> record = new ProducerRecord<>("temp_humidity", recordString);
 			producer.send(record, (metadata, exception) -> {
 				long elapsedTime = System.currentTimeMillis() - kuraPayload.getTimestamp().getTime();
 				if (metadata != null) {
