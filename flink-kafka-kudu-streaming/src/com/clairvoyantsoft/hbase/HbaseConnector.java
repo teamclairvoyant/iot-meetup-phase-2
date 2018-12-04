@@ -29,7 +29,7 @@ public class HbaseConnector {
 		HbaseConnector hbc = new HbaseConnector();
 		try {
 			//hbc.createHbaseTable(tablename, familys);
-			hbc.insertData(tablename, familys);
+			//hbc.insertData(tablename, familys);
 			hbc.readData(tablename, familys);
 			//hbc.deleteTable(tablename);
 		} catch (MasterNotRunningException e) {
