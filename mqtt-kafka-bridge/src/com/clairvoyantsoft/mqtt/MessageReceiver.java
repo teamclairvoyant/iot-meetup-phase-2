@@ -85,7 +85,7 @@ public class MessageReceiver implements MqttCallback {
                     }).start();
                 }
 
-                if (Double.valueOf(humidity) > 60d) {
+                if (Double.valueOf(humidity) > 90d) {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -111,7 +111,7 @@ public class MessageReceiver implements MqttCallback {
                 System.out.println("recordString " + recordString);
 
                 final ProducerRecord<Long, String> record =
-                    new ProducerRecord<>(topic, recordString);
+                    new ProducerRecord<>("temp_humidity", recordString);
 
                 producer.send(record, (metadata, exception) -> {
                     long elapsedTime =

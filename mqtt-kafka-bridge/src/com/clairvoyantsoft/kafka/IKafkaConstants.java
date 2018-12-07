@@ -6,7 +6,7 @@ public interface IKafkaConstants {
 
     public static Integer MESSAGE_COUNT=1000;
 
-    public static String CLIENT_ID="client112";
+    public static String CLIENT_ID="client92";
 
     public static String TOPIC_NAME="test";
 
