@@ -43,12 +43,14 @@ public class HBaseOutputFormat implements OutputFormat<String> {
 
 	@Override
 	public void writeRecord(String record) throws IOException {
-		Put put = new Put(Bytes.toBytes(taskNumber + rowNumber));
-		System.out.println("row " + taskNumber + rowNumber);
+
 		System.out.println("record " + record);
 		if (record.contains("|")) {
+			String strings[] = record.split("\\|");
+			Put put = new Put(Bytes.toBytes(new Long(strings[1])));
+
 			Integer i = 0;
-			for (String s : record.split("\\|")) {
+			for (String s : strings) {
 				System.out.println("s " + s);
 				if (i == 0)
 					put.add(Bytes.toBytes("id"), Bytes.toBytes(columns[i]), Bytes.toBytes(s));
@@ -60,10 +62,11 @@ public class HBaseOutputFormat implements OutputFormat<String> {
 					put.add(Bytes.toBytes("data"), Bytes.toBytes(columns[i]), Bytes.toBytes(new Double(s)));
 				i++;
 			}
+			table.put(put);
 		}
 
-		rowNumber++;
-		table.put(put);
+		//rowNumber++;
+
 	}
 
 	@Override

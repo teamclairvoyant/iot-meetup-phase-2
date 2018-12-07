@@ -1,14 +1,17 @@
 package com.clairvoyantsoft.hbase;
 
+
 import java.io.IOException;
 import java.util.Date;
 
+import com.google.protobuf.ServiceException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.MasterNotRunningException;
 import org.apache.hadoop.hbase.ZooKeeperConnectionException;
+import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
@@ -17,100 +20,119 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.util.Bytes;
 
-import com.google.protobuf.ServiceException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class HbaseConnector {
 
-	Configuration config = HBaseConfiguration.create();
 
-	public static void main(String[] args) throws ServiceException {
-		String tablename = "temp_humidity";
-		String[] familys = { "id", "time", "data" };
-		HbaseConnector hbc = new HbaseConnector();
-		try {
-			//hbc.createHbaseTable(tablename, familys);
-			//hbc.insertData(tablename, familys);
-			hbc.readData(tablename, familys);
-			//hbc.deleteTable(tablename);
-		} catch (MasterNotRunningException e) {
-			e.printStackTrace();
-		} catch (ZooKeeperConnectionException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    Configuration config = HBaseConfiguration.create();
 
-	public void createHbaseTable(String name, String[] colfamily)
-			throws MasterNotRunningException, ZooKeeperConnectionException, IOException, ServiceException {
-		HBaseAdmin admin = new HBaseAdmin(config);
-		admin.checkHBaseAvailable(config);
+    public static void main(String[] args) throws ServiceException {
+        String tablename = "temp_humidity";
+        String[] familys = {"deviceId", "time", "temperature", "humidity"};
+        HbaseConnector hbc = new HbaseConnector();
+        try {
+            // hbc.createHbaseTable(tablename, familys);
+            //hbc.insertData(tablename, familys);
+            hbc.readData(tablename, familys);
+            hbc.massDelete(tablename);
+        } catch (MasterNotRunningException e) {
+            e.printStackTrace();
+        } catch (ZooKeeperConnectionException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-		HTableDescriptor des = new HTableDescriptor(Bytes.toBytes(name));
-		for (int i = 0; i < colfamily.length; i++) {
-			des.addFamily(new HColumnDescriptor(colfamily[i]));
-		}
-		if (admin.tableExists(name)) {
-			System.out.println("Table already exist");
-		} else {
-			admin.createTable(des);
-			System.out.println("Table: " + name + " Sucessfully created");
-		}
+    public void createHbaseTable(String name, String[] colfamily)
+        throws MasterNotRunningException, ZooKeeperConnectionException, IOException,
+               ServiceException {
+        HBaseAdmin admin = new HBaseAdmin(config);
+        admin.checkHBaseAvailable(config);
 
-	}
+        HTableDescriptor des = new HTableDescriptor(Bytes.toBytes(name));
+        for (int i = 0; i < colfamily.length; i++) {
+            des.addFamily(new HColumnDescriptor(colfamily[i]));
+        }
+        if (admin.tableExists(name)) {
+            System.out.println("Table already exist");
+        } else {
+            admin.createTable(des);
+            System.out.println("Table: " + name + " Sucessfully created");
+        }
 
-	public void insertData(String name, String[] colfamily)
-			throws MasterNotRunningException, ZooKeeperConnectionException, IOException, ServiceException {
-		
-		HTable table = new HTable(config, name);
-		long date =  1539847058982l;
-		for (int i = 0; i < 10000; i++) {
-		// create the put object
-		Put put = new Put(Bytes.toBytes("row_"+i));
-		// Add the column into the column family Emp_name with qualifier name
-		put.add(Bytes.toBytes("id"), Bytes.toBytes("deviceId"), Bytes.toBytes("device_1"));
-		// Add the column into the column family sal with qualifier name
-		date =  date+60000l;
-		 System.out.println("date "+date);
-		put.add(Bytes.toBytes("time"), Bytes.toBytes("time"), Bytes.toBytes(date));
-		put.add(Bytes.toBytes("data"), Bytes.toBytes("temperature"), Bytes.toBytes(new Double("10").doubleValue()));
-		put.add(Bytes.toBytes("data"), Bytes.toBytes("humidity"), Bytes.toBytes(new Double("20").doubleValue()));
-		// insert the put instance to table
-		table.put(put);
-		}
-		System.out.println("Values inserted : "); 
-		table.close();
+    }
 
-	}
+    public void insertData(String name, String[] colfamily)
+        throws MasterNotRunningException, ZooKeeperConnectionException, IOException,
+               ServiceException {
+        HTable table = new HTable(config, name);
+        // create the put object
+        Put put = new Put(Bytes.toBytes(new Date().getTime()));
+        // Add the column into the column family Emp_name with qualifier name
+        put.add(Bytes.toBytes("deviceId"), Bytes.toBytes("macId"), Bytes.toBytes("Kiran"));
+        // Add the column into the column family sal with qualifier name
+        put.add(Bytes.toBytes("time"), Bytes.toBytes("long"), Bytes.toBytes("100000"));
+        put.add(Bytes.toBytes("temperature"), Bytes.toBytes("temp_c"), Bytes.toBytes("100000"));
+        put.add(Bytes.toBytes("humidity"), Bytes.toBytes("humidity"), Bytes.toBytes("100000"));
+        // insert the put instance to table
+        table.put(put);
+        System.out.println("Values inserted : ");
+        table.close();
 
-	public void readData(String name, String[] colfamily)
-			throws MasterNotRunningException, ZooKeeperConnectionException, IOException, ServiceException {
-		HTable table = new HTable(config, name);
-		Scan scan = new Scan();
-		scan.addColumn(Bytes.toBytes("id"), Bytes.toBytes("deviceId"));
-		scan.addColumn(Bytes.toBytes("time"), Bytes.toBytes("time"));
-		scan.addColumn(Bytes.toBytes("data"), Bytes.toBytes("temperature"));
-		scan.addColumn(Bytes.toBytes("data"), Bytes.toBytes("humidity"));
-		//scan.setStartRow(Bytes.toBytes("row-1"));
-		// scan.setStartRow(Bytes.toBytes("row-4"));
-		ResultScanner result = table.getScanner(scan);
-		for (Result res : result) {
-			byte[] val1 = res.getValue(Bytes.toBytes("id"), Bytes.toBytes("deviceId"));
-			byte[] val2 = res.getValue(Bytes.toBytes("data"), Bytes.toBytes("temperature"));
-			System.out.println("Row-value:" + Bytes.toString(val1)+ " "+Bytes.toDouble(val2));
-		}
-		table.close();
-	}
-	
-	public void deleteTable(String name) throws MasterNotRunningException, ZooKeeperConnectionException, IOException{
-		HBaseAdmin admin = new HBaseAdmin(config);
+    }
 
-	      // disabling table named emp
-	      admin.disableTable(name);
+    public void massDelete(String name) throws IOException {
 
-	      // Deleting emp
-	      admin.deleteTable(name);
-	      System.out.println("Table deleted");
-	}
+        File file = new File("/tmp/timestamp");
+
+        BufferedReader br = new BufferedReader(new FileReader(file));
+
+        String st;
+        while ((st = br.readLine()) != null) {
+            System.out.println(st);
+        }
+
+        Long maxtime = new Long(st);
+
+        HTable table = new HTable(config, name);
+
+        List<Delete> listOfBatchDelete = new ArrayList<Delete>();
+
+        for (Long i = maxtime; i >= maxtime - 600000; i--) {
+            Delete d = new Delete(Bytes.toBytes(i));
+            listOfBatchDelete.add(d);
+        }
+
+        table.delete(listOfBatchDelete);
+        table.close();
+
+    }
+
+    public void readData(String name, String[] colfamily)
+        throws MasterNotRunningException, ZooKeeperConnectionException, IOException,
+               ServiceException {
+        HTable table = new HTable(config, name);
+        Scan scan = new Scan();
+        scan.addColumn(Bytes.toBytes("deviceId"), Bytes.toBytes("macId"));
+        scan.addColumn(Bytes.toBytes("time"), Bytes.toBytes("long"));
+        scan.addColumn(Bytes.toBytes("temperature"), Bytes.toBytes("temp_c"));
+        scan.addColumn(Bytes.toBytes("humidity"), Bytes.toBytes("humidity"));
+        //scan.setStartRow(Bytes.toBytes("row-1"));
+        // scan.setStartRow(Bytes.toBytes("row-4"));
+        ResultScanner result = table.getScanner(scan);
+        for (Result res : result) {
+            byte[] val = res.getValue(Bytes.toBytes("deviceId"), Bytes.toBytes("macId"));
+            System.out.println("Row-value:" + Bytes.toString(val));
+        }
+        table.close();
+    }
 
 }

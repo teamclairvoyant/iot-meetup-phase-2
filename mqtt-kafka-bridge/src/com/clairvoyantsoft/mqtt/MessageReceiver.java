@@ -67,7 +67,7 @@ public class MessageReceiver implements MqttCallback {
                 String humidity = String.valueOf(humidityReading);
                 String temperature = String.valueOf(temperatureReading);
 
-                if (Double.valueOf(temperature) > 20d) {
+                if (Double.valueOf(temperature) > 30d) {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
