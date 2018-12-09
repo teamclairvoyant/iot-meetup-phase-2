@@ -57,7 +57,7 @@ public class KuduStream implements Stream {
 
 			// stream.timeWindowAll(Time.minutes(2));
 			stream.map(new MyMapFunction())
-					.timeWindowAll(Time.minutes(2))
+					.timeWindowAll(Time.minutes(10))
 					.apply(new AllWindowFunction<Tuple4<String, Long, Double, Double>, RowSerializable, TimeWindow>() {
 
 						/**

@@ -40,7 +40,7 @@ public class HbaseConnector {
         try {
             // hbc.createHbaseTable(tablename, familys);
             //hbc.insertData(tablename, familys);
-            hbc.readData(tablename, familys);
+            //hbc.readData(tablename, familys);
             hbc.massDelete(tablename);
         } catch (MasterNotRunningException e) {
             e.printStackTrace();
@@ -91,28 +91,34 @@ public class HbaseConnector {
 
     public void massDelete(String name) throws IOException {
 
-        File file = new File("/tmp/timestamp");
+        File file = new File("/home/cloudera/hbase_delete_timestamp.txt");
 
         BufferedReader br = new BufferedReader(new FileReader(file));
 
-        String st;
+        String st,stamp = "";
         while ((st = br.readLine()) != null) {
-            System.out.println(st);
+           // System.out.println(st);
+        	stamp=stamp+st;
         }
 
-        Long maxtime = new Long(st);
+        System.out.println("stamp "+stamp);
+        
+        Long maxtime = new Long(stamp);
 
         HTable table = new HTable(config, name);
 
         List<Delete> listOfBatchDelete = new ArrayList<Delete>();
 
-        for (Long i = maxtime; i >= maxtime - 600000; i--) {
+        for (Long i = maxtime; i >= maxtime - 60; i--) {
             Delete d = new Delete(Bytes.toBytes(i));
             listOfBatchDelete.add(d);
+            System.out.println(i);
         }
 
         table.delete(listOfBatchDelete);
         table.close();
+        
+        System.out.println("done");
 
     }
 
